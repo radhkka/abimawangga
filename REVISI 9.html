@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media Pembelajaran Renang Gaya Dada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root{
+      --bg:#06111f; --bg2:#0b1d38; --card:rgba(255,255,255,.085);
+      --line:rgba(255,255,255,.14); --text:#fff; --muted:#c9dcff;
+      --muted2:#9db9ee; --blue:#2563eb; --cyan:#67e8f9; --green:#22c55e;
+      --shadow:0 24px 70px rgba(0,0,0,.38);
+    }
+    body{
+      font-family:Poppins, sans-serif; color:var(--text); min-height:100vh; overflow:hidden;
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,.28), transparent 28%),
+        radial-gradient(circle at 85% 18%, rgba(103,232,249,.16), transparent 24%),
+        linear-gradient(180deg, #06111f 0%, #0a1930 55%, #020817 100%);
+    }
+    button, input, textarea { font-family: inherit; }
+    .app{ height:100vh; display:grid; grid-template-rows:74px 1fr 74px; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:18px;
+      padding:0 28px; background:rgba(2,8,23,.62); backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--line);
+    }
+    .brand{display:flex; align-items:center; gap:14px;}
+    .logo{
+      width:48px; height:48px; border-radius:16px; display:grid; place-items:center;
+      background:linear-gradient(135deg,#2563eb,#22d3ee); box-shadow:0 12px 32px rgba(37,99,235,.35);
+      overflow:hidden; font-size:24px; font-weight:800;
+    }
+    .logo img{width:85%; height:85%; object-fit:contain;}
+    .brand small{display:block; color:var(--muted2); font-size:12px;}
+    .brand h1{font-size:17px; line-height:1.2;}
+    .top-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+    .chip{
+      padding:9px 13px; border-radius:999px; background:rgba(255,255,255,.06);
+      border:1px solid var(--line); color:var(--muted); font-size:12px;
+    }
+    .stage{position:relative; overflow:hidden;}
+    .page{
+      position:absolute; inset:0; overflow:auto; padding:34px 28px 28px;
+      opacity:0; transform:translateX(30px) scale(.985); pointer-events:none;
+      transition:.55s cubic-bezier(.22,1,.36,1);
+    }
+    .page.active{opacity:1; transform:translateX(0) scale(1); pointer-events:auto;}
+    .container{width:min(1180px,100%); margin:0 auto;}
+    .center{min-height:calc(100vh - 182px); display:grid; place-items:center;}
+    .hero-card,.glass,.card,.video-card,.quiz-card{
+      background:var(--card); border:1px solid var(--line); backdrop-filter:blur(18px);
+      box-shadow:var(--shadow); border-radius:30px;
+    }
+    .hero-card{width:min(820px,100%); text-align:center; padding:48px 30px;}
+    .hero-card .big-logo{width:92px; height:92px; margin:0 auto 22px; border-radius:26px;}
+    .eyebrow{
+      display:inline-block; padding:9px 16px; border-radius:999px; margin-bottom:16px;
+      background:rgba(59,130,246,.13); border:1px solid rgba(147,197,253,.18); color:#dbeafe; font-size:13px;
+    }
+    h2{font-size:clamp(2rem,4vw,4rem); line-height:1.08; margin-bottom:16px;}
+    h2 span{background:linear-gradient(90deg,#67e8f9,#93c5fd,#a5b4fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+    p{color:var(--muted); line-height:1.8;}
+    .btn{
+      border:0; cursor:pointer; border-radius:18px; padding:13px 20px; font-weight:700;
+      transition:.25s ease; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .btn:hover{transform:translateY(-2px);}
+    .primary{color:white; background:linear-gradient(135deg,#2563eb,#3b82f6); box-shadow:0 16px 35px rgba(37,99,235,.28);}
+    .secondary{color:white; background:rgba(255,255,255,.065); border:1px solid var(--line);}
+    .danger{color:white; background:rgba(239,68,68,.18); border:1px solid rgba(248,113,113,.25);}
+    .hero-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:26px;}
+    .menu-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:22px; margin-top:24px;}
+    .menu-card{
+      min-height:190px; padding:26px; border-radius:28px; cursor:pointer; position:relative; overflow:hidden;
+      background:linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.045));
+      border:1px solid var(--line); box-shadow:var(--shadow); transition:.28s ease;
+    }
+    .menu-card:hover{transform:translateY(-5px); border-color:rgba(103,232,249,.36);}
+    .menu-no{width:44px; height:44px; border-radius:15px; display:grid; place-items:center; background:rgba(59,130,246,.22); color:#bfdbfe; font-weight:800; margin-bottom:16px;}
+    .menu-card h3{font-size:25px; margin-bottom:10px;}
+    .menu-card:after{content:"›"; position:absolute; right:24px; bottom:10px; font-size:74px; color:rgba(255,255,255,.11);}
+    .page-title{display:flex; align-items:end; justify-content:space-between; gap:18px; margin-bottom:24px;}
+    .page-title h2{font-size:clamp(1.8rem,3vw,3.2rem); margin:0;}
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+    .steps{display:grid; gap:16px;}
+    .step{
+      display:grid; grid-template-columns:82px 1fr; gap:18px; align-items:center; padding:18px;
+      border-radius:24px; background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.08);
+    }
+    .step video{width:82px; height:82px; object-fit:cover; border-radius:18px; background:#000;}
+    .step h4{font-size:18px; margin-bottom:6px;}
+    .video-card{padding:22px;}
+    .video-wrap{position:relative; border-radius:22px; overflow:hidden; display:flex; justify-content:center; align-items:center; padding:10px;}
+    video{max-width:100%;}
+    .main-video{width:100%; height:auto; max-height:none; object-fit:contain; background:transparent;}
+    .stop-badge{
+      position:absolute; top:14px; right:14px; z-index:2; padding:8px 12px; border-radius:999px;
+      background:rgba(2,8,23,.78); border:1px solid rgba(255,255,255,.15); font-size:11px; letter-spacing:1.3px;
+    }
+    .controls{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+    .card{padding:24px;}
+    .eval-list{display:grid; gap:14px;}
+    .eval-item{padding:18px; border-radius:22px; background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.08);}
+    .eval-item h4{margin-bottom:10px;}
+    textarea{
+      width:100%; min-height:88px; resize:vertical; border-radius:18px; padding:14px 16px;
+      border:1px solid rgba(255,255,255,.12); background:rgba(2,8,23,.55); color:white; outline:none;
+    }
+    .progress{height:12px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; margin:12px 0;}
+    .fill{height:100%; width:0%; background:linear-gradient(90deg,#67e8f9,#60a5fa,#818cf8); transition:.35s;}
+
+    .motion-popup{
+      position:absolute;
+      left:18px;
+      right:18px;
+      top:18px;
+      z-index:4;
+      padding:16px 18px;
+      border-radius:20px;
+      background:rgba(2,8,23,.86);
+      border:1px solid rgba(103,232,249,.34);
+      box-shadow:0 18px 45px rgba(0,0,0,.36);
+      backdrop-filter:blur(16px);
+      opacity:0;
+      transform:translateY(18px);
+      pointer-events:none;
+      transition:.35s ease;
+    }
+    .motion-popup.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+    .motion-popup h4{
+      margin-bottom:6px;
+      color:#e0f2fe;
+      font-size:16px;
+    }
+    .motion-popup p{
+      color:#c9dcff;
+      line-height:1.65;
+      font-size:14px;
+    }
+
+    .coord-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:22px;}
+    .coord-card{
+      display:grid; grid-template-columns:1fr; overflow:hidden;
+      background:var(--card); border:1px solid var(--line); backdrop-filter:blur(18px);
+      box-shadow:var(--shadow); border-radius:30px;
+    }
+    .coord-video{background:#000; min-height:240px; display:grid; place-items:center;}
+    .coord-video video{width:100%; height:100%; max-height:330px; object-fit:cover; background:#000;}
+    .coord-body{padding:22px;}
+    .coord-tag{
+      display:inline-block; padding:8px 13px; border-radius:999px; margin-bottom:12px;
+      background:rgba(34,211,238,.12); border:1px solid rgba(103,232,249,.18);
+      color:#a5f3fc; font-size:12px; font-weight:700;
+    }
+    .coord-body h3{font-size:22px; margin-bottom:10px;}
+
+    .quiz-grid{display:grid; gap:16px;}
+    .quiz-card{padding:22px;}
+    .option{display:block; width:100%; text-align:left; margin-top:10px; color:white; padding:12px 14px; border-radius:16px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); cursor:pointer;}
+    .option.correct{background:rgba(34,197,94,.20); border-color:rgba(74,222,128,.34);}
+    .option.wrong{background:rgba(239,68,68,.20); border-color:rgba(248,113,113,.32);}
+    .bottombar{
+      display:flex; align-items:center; justify-content:space-between; gap:14px; padding:0 28px;
+      border-top:1px solid var(--line); background:rgba(2,8,23,.62); backdrop-filter:blur(18px);
+    }
+    .dots{display:flex; align-items:center; gap:8px;}
+    .dot{width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,.22);}
+    .dot.active{width:32px; border-radius:999px; background:linear-gradient(90deg,#67e8f9,#60a5fa);}
+    .footer-buttons{display:flex; gap:10px;}
+    @media(max-width:900px){
+      body{overflow:auto}.app{height:auto; min-height:100vh; grid-template-rows:auto 1fr auto;}
+      .stage{min-height:760px}.page{position:relative; display:none; min-height:auto}.page.active{display:block}
+      .menu-grid,.grid-2,.coord-grid{grid-template-columns:1fr}.topbar,.bottombar{padding:14px 16px}.page{padding:24px 16px}
+      .page-title{display:block}.step{grid-template-columns:1fr}.step video{width:100%; height:190px}
+    }
+
+
+    /* === UPGRADE: dynamic theme, smooth animations, same content === */
+    :root{
+      --accent-a:#22d3ee;
+      --accent-b:#60a5fa;
+      --accent-c:#a78bfa;
+      --glow:rgba(96,165,250,.38);
+    }
+    body{
+      background-size:180% 180%;
+      animation:themeShift 18s ease-in-out infinite alternate;
+    }
+    body::before, body::after{
+      content:"";
+      position:fixed;
+      inset:auto;
+      z-index:-1;
+      width:42vmax;
+      height:42vmax;
+      border-radius:999px;
+      filter:blur(34px);
+      opacity:.34;
+      pointer-events:none;
+      animation:floatBlob 16s ease-in-out infinite;
+      background:radial-gradient(circle, var(--accent-a), transparent 62%);
+    }
+    body::before{left:-10vmax; top:10vmax;}
+    body::after{right:-12vmax; bottom:-8vmax; animation-delay:-7s; background:radial-gradient(circle, var(--accent-c), transparent 62%);}
+    @keyframes themeShift{
+      0%{--accent-a:#22d3ee; --accent-b:#60a5fa; --accent-c:#818cf8; filter:hue-rotate(0deg);}
+      33%{--accent-a:#34d399; --accent-b:#2dd4bf; --accent-c:#60a5fa; filter:hue-rotate(16deg);}
+      66%{--accent-a:#f0abfc; --accent-b:#a78bfa; --accent-c:#38bdf8; filter:hue-rotate(42deg);}
+      100%{--accent-a:#fbbf24; --accent-b:#fb7185; --accent-c:#22d3ee; filter:hue-rotate(72deg);}
+    }
+    @keyframes floatBlob{
+      0%,100%{transform:translate3d(0,0,0) scale(1);}
+      45%{transform:translate3d(9vmax,-5vmax,0) scale(1.16);}
+      75%{transform:translate3d(-4vmax,6vmax,0) scale(.92);}
+    }
+    .topbar,.bottombar{animation:slideSoft .75s cubic-bezier(.22,1,.36,1) both;}
+    .bottombar{animation-delay:.08s;}
+    @keyframes slideSoft{from{opacity:0; transform:translateY(-18px);}to{opacity:1; transform:translateY(0);}}
+    .logo,.big-logo{
+      background:linear-gradient(135deg,var(--accent-a),var(--accent-b),var(--accent-c));
+      background-size:220% 220%;
+      animation:gradientMove 6s ease infinite, logoPulse 2.8s ease-in-out infinite;
+    }
+    @keyframes gradientMove{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+    @keyframes logoPulse{0%,100%{box-shadow:0 12px 32px var(--glow); transform:translateY(0) rotate(0deg);}50%{box-shadow:0 18px 55px var(--glow); transform:translateY(-3px) rotate(2deg);}}
+    .hero-card,.glass,.card,.video-card,.quiz-card,.coord-card,.menu-card{
+      position:relative;
+      overflow:hidden;
+      animation:cardIn .75s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hero-card::before,.card::before,.video-card::before,.quiz-card::before,.coord-card::before,.menu-card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:linear-gradient(120deg,transparent,rgba(255,255,255,.18),transparent);
+      transform:translateX(-120%);
+      animation:shine 4.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes shine{0%,55%{transform:translateX(-120%);}78%,100%{transform:translateX(120%);}}
+    @keyframes cardIn{from{opacity:0; transform:translateY(26px) scale(.98);}to{opacity:1; transform:translateY(0) scale(1);}}
+    .page.active .eyebrow,.page.active h2,.page.active p,.page.active .menu-card,.page.active .step,.page.active .coord-card,.page.active .eval-item,.page.active .quiz-card{
+      animation:riseFade .72s cubic-bezier(.22,1,.36,1) both;
+    }
+    .page.active h2{animation-delay:.07s;}
+    .page.active p{animation-delay:.13s;}
+    .page.active .menu-card:nth-child(1),.page.active .coord-card:nth-child(1),.page.active .step:nth-child(1),.page.active .eval-item:nth-child(1),.page.active .quiz-card:nth-child(1){animation-delay:.08s;}
+    .page.active .menu-card:nth-child(2),.page.active .coord-card:nth-child(2),.page.active .step:nth-child(2),.page.active .eval-item:nth-child(2),.page.active .quiz-card:nth-child(2){animation-delay:.16s;}
+    .page.active .menu-card:nth-child(3),.page.active .coord-card:nth-child(3),.page.active .step:nth-child(3),.page.active .eval-item:nth-child(3),.page.active .quiz-card:nth-child(3){animation-delay:.24s;}
+    .page.active .menu-card:nth-child(4),.page.active .coord-card:nth-child(4),.page.active .step:nth-child(4),.page.active .eval-item:nth-child(4),.page.active .quiz-card:nth-child(4){animation-delay:.32s;}
+    .page.active .quiz-card:nth-child(5){animation-delay:.40s;}
+    @keyframes riseFade{from{opacity:0; transform:translateY(28px) scale(.985);}to{opacity:1; transform:translateY(0) scale(1);}}
+    h2 span,h2{
+      text-shadow:0 12px 44px rgba(34,211,238,.15);
+    }
+    .btn,.chip,.dot,.option,.step,.coord-card,.menu-card,textarea{
+      transition:transform .28s cubic-bezier(.22,1,.36,1), border-color .28s, background .28s, box-shadow .28s;
+    }
+    .btn:hover,.option:hover,.step:hover{transform:translateY(-3px) scale(1.015); box-shadow:0 18px 40px rgba(0,0,0,.25);}
+    .primary,.fill,.dot.active{
+      background:linear-gradient(135deg,var(--accent-a),var(--accent-b),var(--accent-c));
+      background-size:220% 220%;
+      animation:gradientMove 5.2s ease infinite;
+    }
+    .menu-card:hover,.coord-card:hover,.quiz-card:hover,.card:hover,.video-card:hover{
+      border-color:color-mix(in srgb, var(--accent-a) 55%, white 15%);
+      box-shadow:0 28px 85px rgba(0,0,0,.42), 0 0 42px var(--glow);
+    }
+    .stage::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:radial-gradient(rgba(255,255,255,.22) 1px, transparent 1px);
+      background-size:34px 34px;
+      opacity:.08;
+      animation:gridDrift 22s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes gridDrift{from{background-position:0 0;}to{background-position:340px 220px;}}
+    .page{transition:opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1), filter .65s; filter:blur(8px);}
+    .page.active{filter:blur(0);}
+    .stop-badge,.coord-tag,.eyebrow{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04)); box-shadow:0 0 28px var(--glow);}
+    .motion-popup.show{animation:popupBounce .42s cubic-bezier(.22,1,.36,1) both;}
+    @keyframes popupBounce{0%{opacity:0; transform:translateY(22px) scale(.96);}70%{opacity:1; transform:translateY(-2px) scale(1.01);}100%{opacity:1; transform:translateY(0) scale(1);}}
+    @media (prefers-reduced-motion: reduce){
+      *,*::before,*::after{animation:none!important; transition:none!important; scroll-behavior:auto!important;}
+    }
+
+    /* === MODEL BARU: sidebar dashboard + floating navigator, konten tetap sama === */
+    :root{--panel:rgba(4,14,30,.58);--panel-strong:rgba(5,20,42,.78);--radius-xl:34px;--radius-lg:26px;}
+
+    /* === BACKGROUND ELEGAN: simple + pattern tipis + glow halus === */
+    body{
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(120,140,255,.10), transparent 30%),
+        radial-gradient(circle at 78% 74%, rgba(120,210,255,.055), transparent 34%),
+        linear-gradient(135deg,#0e1116 0%,#0b0f14 52%,#101827 100%);
+      background-size:140% 140%;
+      animation:softBgMove 16s ease-in-out infinite alternate;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,.018) 0px,
+          rgba(255,255,255,.018) 1px,
+          transparent 1px,
+          transparent 7px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,.010) 0px,
+          rgba(255,255,255,.010) 1px,
+          transparent 1px,
+          transparent 22px
+        );
+      opacity:.28;
+      animation:patternDrift 26s linear infinite;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:-20%;
+      z-index:-3;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 28% 30%, rgba(255,255,255,.035), transparent 25%),
+        radial-gradient(circle at 74% 68%, rgba(160,190,255,.045), transparent 30%);
+      filter:blur(18px);
+      opacity:.72;
+      animation:glowFloatSoft 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes softBgMove{
+      0%{background-position:0% 50%;}
+      100%{background-position:100% 50%;}
+    }
+    @keyframes patternDrift{
+      from{background-position:0 0, 0 0;}
+      to{background-position:0 140px, 120px 0;}
+    }
+    @keyframes glowFloatSoft{
+      0%{transform:translate3d(-2%,-1%,0) scale(1);}
+      100%{transform:translate3d(2%,1.5%,0) scale(1.04);}
+    }
+    .app{height:100vh;display:grid;grid-template-columns:300px 1fr;grid-template-rows:1fr;gap:0;padding:20px;}
+    .topbar{grid-column:1;grid-row:1;height:calc(100vh - 40px);flex-direction:column;align-items:stretch;justify-content:flex-start;padding:24px;border:1px solid rgba(255,255,255,.16);border-radius:var(--radius-xl);background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.035));box-shadow:0 28px 80px rgba(0,0,0,.42);position:relative;overflow:hidden;}
+    .topbar::before{content:"";position:absolute;inset:-40% -80% auto auto;width:280px;height:280px;border-radius:999px;background:radial-gradient(circle,var(--accent-a),transparent 68%);opacity:.36;filter:blur(10px);animation:floatBlob 14s ease-in-out infinite;}
+    .brand{flex-direction:column;align-items:flex-start;gap:18px;position:relative;z-index:1;}
+    .brand .logo{width:70px;height:70px;border-radius:24px;}
+    .brand small{font-size:13px;letter-spacing:.4px;text-transform:uppercase;}
+    .brand h1{font-size:26px;line-height:1.18;max-width:230px;}
+    .top-actions{margin-top:auto;flex-direction:column;align-items:stretch;position:relative;z-index:1;}
+    .chip{width:100%;text-align:center;border-radius:18px;padding:12px 14px;background:rgba(255,255,255,.075);}
+    .stage{grid-column:2;grid-row:1;min-width:0;border-radius:var(--radius-xl);margin-left:20px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 28px 90px rgba(0,0,0,.34);}
+    .page{padding:32px 34px 108px;transform:translateY(38px) scale(.975) rotateX(4deg);transform-origin:center bottom;}
+    .page.active{transform:translateY(0) scale(1) rotateX(0);}
+    .container{width:min(1240px,100%);}.center{min-height:calc(100vh - 170px);place-items:stretch;align-items:center;}
+    .hero-card{width:100%;min-height:70vh;display:grid;grid-template-columns:minmax(230px,.8fr) 1.2fr;align-items:center;gap:34px;text-align:left;padding:42px;border-radius:40px;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.035)),radial-gradient(circle at 12% 20%,rgba(255,255,255,.12),transparent 34%);}
+    .hero-card .big-logo{width:min(260px,42vw);height:min(260px,42vw);margin:0;border-radius:44px;font-size:66px;grid-row:1 / span 4;}
+    .hero-card .eyebrow,.hero-card h2,.hero-card p,.hero-card .hero-actions{grid-column:2;}
+    .hero-actions{justify-content:flex-start;}h2{letter-spacing:-.06em;}
+    .page-title{align-items:center;padding:22px;border-radius:30px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10);margin-bottom:24px;}
+    .page-title h2{font-size:clamp(2rem,3.5vw,4.2rem);}
+    .menu-grid{grid-template-columns:1.15fr .85fr;grid-template-areas:"a b" "a c" "d d";gap:18px;}
+    .menu-card:nth-child(1){grid-area:a;min-height:430px;display:flex;flex-direction:column;justify-content:flex-end;}
+    .menu-card:nth-child(2){grid-area:b}.menu-card:nth-child(3){grid-area:c}.menu-card:nth-child(4){grid-area:d;min-height:150px;}
+    .menu-card{border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.035));}.menu-card h3{font-size:clamp(1.45rem,2vw,2.7rem);}
+    .menu-no{width:56px;height:56px;border-radius:20px;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));color:#04111f;box-shadow:0 16px 42px var(--glow);}
+    .grid-2{grid-template-columns:minmax(340px,.9fr) minmax(360px,1.1fr);align-items:start;}.video-card,.card{border-radius:34px;position:sticky;top:24px;}
+    .steps{gap:14px;counter-reset:stepnum;}.step{grid-template-columns:108px 1fr;border-radius:28px;background:linear-gradient(120deg,rgba(255,255,255,.10),rgba(255,255,255,.035));counter-increment:stepnum;position:relative;}
+    .step::after{content:"0" counter(stepnum);position:absolute;right:18px;top:14px;color:rgba(255,255,255,.10);font-size:48px;font-weight:800;line-height:1;}
+    .step video{width:108px;height:108px;border-radius:24px;}
+    .coord-grid{grid-template-columns:repeat(4,minmax(240px,1fr));overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory;}
+    .coord-card{min-width:260px;border-radius:34px;scroll-snap-align:start;}.coord-video{min-height:210px}.coord-body{padding:20px;}
+    .eval-list{display:grid;grid-template-columns:1fr;gap:16px;}.eval-item{border-radius:28px;background:linear-gradient(120deg,rgba(255,255,255,.10),rgba(255,255,255,.035));}textarea{min-height:116px;border-radius:22px;}
+    .quiz-grid{grid-template-columns:repeat(2,minmax(260px,1fr));gap:18px;}.quiz-card{border-radius:30px;background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.035));}.option{border-radius:18px;}
+    .bottombar{position:fixed;left:340px;right:32px;bottom:24px;height:70px;z-index:20;border:1px solid rgba(255,255,255,.16);border-radius:26px;padding:0 18px;background:rgba(3,13,30,.64);box-shadow:0 18px 60px rgba(0,0,0,.38);}
+    .dots{gap:10px}.dot{width:12px;height:12px;cursor:pointer}.dot.active{width:46px}.btn{border-radius:18px;}
+    @media(max-width:1100px){.app{grid-template-columns:240px 1fr;padding:14px}.stage{margin-left:14px}.topbar{height:calc(100vh - 28px);padding:18px}.brand h1{font-size:20px}.bottombar{left:268px;right:20px;bottom:18px}.hero-card{grid-template-columns:1fr;text-align:center;place-items:center}.hero-card .big-logo,.hero-card .eyebrow,.hero-card h2,.hero-card p,.hero-card .hero-actions{grid-column:1;grid-row:auto}.hero-actions{justify-content:center}.menu-grid{grid-template-columns:1fr 1fr;grid-template-areas:none}.menu-card:nth-child(n){grid-area:auto;min-height:190px}.coord-grid{grid-template-columns:repeat(2,1fr);overflow:visible}}
+    @media(max-width:900px){body{overflow:auto}.app{height:auto;min-height:100vh;display:block;padding:14px}.topbar{height:auto;flex-direction:row;align-items:center;margin-bottom:14px;border-radius:28px}.brand{flex-direction:row;align-items:center}.brand .logo{width:54px;height:54px;border-radius:18px}.brand h1{font-size:16px}.top-actions{margin-top:0;flex-direction:row}.chip{width:auto}.stage{margin-left:0;min-height:720px;border-radius:28px}.page{padding:24px 16px 110px}.hero-card{min-height:auto;padding:30px 22px;border-radius:30px}.hero-card .big-logo{width:120px;height:120px;border-radius:30px}.menu-grid,.grid-2,.coord-grid,.quiz-grid{grid-template-columns:1fr;display:grid}.video-card,.card{position:relative;top:auto}.bottombar{left:14px;right:14px;bottom:14px;height:auto;min-height:66px}.footer-buttons{flex-wrap:wrap;justify-content:flex-end}}
+
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo"><img src="Universitas Negeri Malang.png" alt="Logo" onerror="this.style.display='none'; this.parentElement.textContent='PJ';"></div>
+        <div>
+          <small>Media Pembelajaran Interaktif</small>
+          <h1>Teknik Dasar Renang Gaya Dada</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+      </div>
+    </header>
+
+    <section class="stage">
+      <!-- PAGE 1 -->
+      <article class="page active" data-page="1">
+        <div class="center container">
+          <div class="hero-card">
+            <div class="logo big-logo"><img src="Universitas Negeri Malang.png" alt="Logo" onerror="this.style.display='none'; this.parentElement.textContent='PJ';"></div>
+            <div class="eyebrow">Opening</div>
+            <h2>Pendidikan Jasmani, Kesehatan, dan Rekreasi</h2>
+            <p>
+              Media pembelajaran interaktif teknik dasar renang gaya dada. Materi disusun seperti :
+              pembuka, menu, materi video stop motion, video koordinasi, evaluasi, dan quiz.
+            </p>
+            <div class="hero-actions">
+              <button class="btn primary" onclick="goPage(2)">NEXT</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PAGE 2 -->
+      <article class="page" data-page="2">
+        <div class="container">
+          <div class="page-title">
+            <div>
+              <div class="eyebrow">Page 2</div>
+              <h2>Menu Pembelajaran</h2>
+              <p>Pilih salah satu menu untuk membuka halaman materi.</p>
+            </div>
+          </div>
+          <div class="menu-grid">
+            <div class="menu-card" onclick="goPage(3)">
+              <div class="menu-no">1</div>
+              <h3>Teknik Dasar</h3>
+              <p>Video per Gerakan disertai penjelasan.</p>
+            </div>
+            <div class="menu-card" onclick="goPage(4)">
+              <div class="menu-no">2</div>
+              <h3>Koordinasi Gerakan</h3>
+              <p>Full video untuk melihat gerakan utuh.</p>
+            </div>
+            <div class="menu-card" onclick="goPage(5)">
+              <div class="menu-no">3</div>
+              <h3>Evaluasi</h3>
+              <p>Soal essay untuk mengukur pemahaman peserta didik.</p>
+            </div>
+            <div class="menu-card" onclick="goPage(6)">
+              <div class="menu-no">4</div>
+              <h3>Quiz Time</h3>
+              <p>Kuis pilihan ganda interaktif dengan skor otomatis.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PAGE 3 -->
+      <article class="page" data-page="3">
+        <div class="container">
+          <div class="page-title">
+            <div>
+              <div class="eyebrow">Page 3 • Teknik Dasar</div>
+              <h2>Penjelasan per Gerakan</h2>
+              <p>Setiap gerakan ditampilkan frame-by-frame serta penjelasan terkait gaya tersebut.</p>
+            </div>
+            <button class="btn secondary" onclick="goPage(2)">Kembali ke Menu</button>
+          </div>
+
+          <div class="grid-2">
+            <div class="video-card">
+              <div class="video-wrap">
+                <span class="stop-badge">STOP MOTION</span>
+                <video id="stopMain" class="main-video" playsinline preload="metadata" muted>
+                  <source src="kaki1.mp4" type="video/mp4">
+                </video>
+                <div class="motion-popup" id="motionPopup">
+                  <h4 id="popupTitle">Awalan Gerakan Kaki</h4>
+                  <p id="popupText">Tumit ditarik mendekati pinggul dan telapak kaki diputar keluar sebagai persiapan tendangan.</p>
+                </div>
+              </div>
+              <div class="controls">
+                <button class="btn primary" onclick="toggleStop()">▶ Putar / Jeda</button>
+                <button class="btn secondary" onclick="resetStop()">↺ Ulang</button>
+              </div>
+              <h3 id="stopTitle" style="margin-top:14px;">Gerakan Kaki Tahap 1</h3>
+              <p id="stopDesc" style="margin-top:8px;">Kaki ditekuk, tumit ditarik mendekati pinggul, lalu telapak kaki diputar keluar sebagai awalan tendangan.</p>
+              <p style="margin-top:12px;">Klik salah satu gerakan di samping untuk mengganti video dan membaca penjelasannya.</p>
+            </div>
+
+            <div class="steps">
+              <div class="step" onclick="selectStop('kaki1.mp4','Gerakan Kaki Tahap 1','Kaki ditekuk, tumit ditarik mendekati pinggul, lalu telapak kaki diputar keluar sebagai awalan tendangan.')">
+                <div style="grid-column:1/-1; color:#9db9ee; font-size:13px; margin-top:6px;">Penjelasan: Tahap awal mempersiapkan dorongan kaki agar maksimal.</div>
+                <video muted preload="metadata"><source src="kaki1.mp4" type="video/mp4"></video>
+                <div><h4>Gerakan Kaki Tahap 1</h4><p>Kaki ditekuk dan disiapkan untuk mendorong air.</p></div>
+              </div>
+              <div class="step" onclick="selectStop('abim2.mp4','Gerakan Kaki Tahap 2','Kaki menendang ke samping belakang, kemudian dirapatkan agar tubuh terdorong maju.')">
+                <div style="grid-column:1/-1; color:#9db9ee; font-size:13px; margin-top:6px;">Penjelasan: Tendangan memberikan dorongan utama ke depan.</div>
+                <video muted preload="metadata"><source src="abim2.mp4" type="video/mp4"></video>
+                <div><h4>Gerakan Kaki Tahap 2</h4><p>Tendangan kaki dilakukan simetris seperti gaya katak.</p></div>
+              </div>
+              <div class="step" onclick="selectStop('gerakan-tangan-abim.mp4','Gerakan Tangan','Tangan membuka ke samping, menarik air ke arah dada, lalu kembali lurus ke depan.')">
+                <div style="grid-column:1/-1; color:#9db9ee; font-size:13px; margin-top:6px;">Penjelasan: Gerakan tangan membantu arah dan keseimbangan.</div>
+                <video muted preload="metadata"><source src="gerakan-tangan-abim.mp4" type="video/mp4"></video>
+                <div><h4>Gerakan Tangan</h4><p>Tarik, sapu, rapatkan, lalu luruskan kembali.</p></div>
+              </div>
+              <div class="step" onclick="selectStop('abim3.mp4','Pernapasan','Kepala naik saat tangan menarik air, mengambil napas, lalu masuk kembali saat tangan diluruskan.')">
+                <div style="grid-column:1/-1; color:#9db9ee; font-size:13px; margin-top:6px;">Penjelasan: Pernapasan harus sinkron dengan gerakan tangan.</div>
+                <video muted preload="metadata"><source src="abim3.mp4" type="video/mp4"></video>
+                <div><h4>Pernapasan</h4><p>Ambil napas saat kepala naik, buang napas di air.</p></div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PAGE 4 -->
+      <article class="page" data-page="4">
+        <div class="container">
+          <div class="page-title">
+            <div>
+              <div class="eyebrow">Page 4 • Koordinasi Gerakan</div>
+              <h2>Koordinasi Gerakan Full Video</h2>
+              <p>
+                Bagian ini dibuat menjadi kolom satu per satu. Setiap kolom menjelaskan fungsi gerakan
+                dalam koordinasi gaya dada dan menampilkan video normal tanpa penjelasan.
+              </p>
+            </div>
+            <button class="btn secondary" onclick="goPage(2)">Kembali ke Menu</button>
+          </div>
+
+          <div class="coord-grid">
+            <div class="coord-card">
+              <div class="coord-video">
+                <video controls playsinline preload="metadata">
+                  <source src="kaki1.mp4" type="video/mp4">
+                  Browser tidak mendukung video.
+                </video>
+              </div>
+              <div class="coord-body">
+                <span class="coord-tag">Gerakan 1</span>
+                <h3>Awalan Gerakan Kaki</h3>
+                <p>
+                  Tumit ditarik mendekati pinggul, lutut ditekuk, lalu telapak kaki diputar keluar.
+                  Gerakan ini menjadi persiapan sebelum kaki menendang air.
+                </p>
+              </div>
+            </div>
+
+            <div class="coord-card">
+              <div class="coord-video">
+                <video controls playsinline preload="metadata">
+                  <source src="abim2.mp4" type="video/mp4">
+                  Browser tidak mendukung video.
+                </video>
+              </div>
+              <div class="coord-body">
+                <span class="coord-tag">Gerakan 2</span>
+                <h3>Dorongan Kaki</h3>
+                <p>
+                  Kedua kaki menendang ke arah luar dan belakang secara bersamaan, kemudian dirapatkan.
+                  Dorongan kaki membantu tubuh meluncur maju di dalam air.
+                </p>
+              </div>
+            </div>
+
+            <div class="coord-card">
+              <div class="coord-video">
+                <video controls playsinline preload="metadata">
+                  <source src="gerakan-tangan-abim.mp4" type="video/mp4">
+                  Browser tidak mendukung video.
+                </video>
+              </div>
+              <div class="coord-body">
+                <span class="coord-tag">Gerakan 3</span>
+                <h3>Gerakan Tangan</h3>
+                <p>
+                  Tangan membuka ke samping, menarik air ke arah dada, kemudian kembali lurus ke depan.
+                  Gerakan tangan membantu mengangkat tubuh dan menjaga arah renang.
+                </p>
+              </div>
+            </div>
+
+            <div class="coord-card">
+              <div class="coord-video">
+                <video controls playsinline preload="metadata">
+                  <source src="abim3.mp4" type="video/mp4">
+                  Browser tidak mendukung video.
+                </video>
+              </div>
+              <div class="coord-body">
+                <span class="coord-tag">Gerakan 4</span>
+                <h3>Pernapasan &amp; Koordinasi Utuh</h3>
+                <p>
+                  Kepala naik saat tangan menarik air untuk mengambil napas. Setelah itu tangan diluruskan,
+                  kaki menendang, dan tubuh meluncur dalam satu rangkaian gerakan.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PAGE 5 -->
+      <article class="page" data-page="5">
+        <div class="container">
+          <div class="page-title">
+            <div>
+              <div class="eyebrow">Page 5 • Evaluasi</div>
+              <h2>Evaluasi Pemahaman</h2>
+              <p>Isi jawaban pada kolom yang tersedia. Progress akan terisi otomatis.</p>
+            </div>
+            <button class="btn secondary" onclick="goPage(2)">Kembali ke Menu</button>
+          </div>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Progress Jawaban</h3>
+              <div class="progress"><div class="fill" id="evalFill"></div></div>
+              <p id="evalPercent">0% selesai</p>
+            </div>
+            <div class="eval-list">
+              <div class="eval-item"><h4>1. Jelaskan tahapan gerakan kaki gaya dada secara urut.</h4><textarea class="essay"></textarea></div>
+              <div class="eval-item"><h4>2. Jelaskan urutan gerakan tangan pada gaya dada.</h4><textarea class="essay"></textarea></div>
+              <div class="eval-item"><h4>3. Bagaimana koordinasi tangan, kaki, dan pernapasan?</h4><textarea class="essay"></textarea></div>
+              <div class="eval-item"><h4>4. Sebutkan kesalahan umum saat melakukan gaya dada.</h4><textarea class="essay"></textarea></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PAGE 6 -->
+      <article class="page" data-page="6">
+        <div class="container">
+          <div class="page-title">
+            <div>
+              <div class="eyebrow">Page 6 • Quiz Time</div>
+              <h2>Quiz Time</h2>
+              <p>Pilih jawaban yang benar. Skor akan dihitung otomatis.</p>
+            </div>
+            <button class="btn secondary" onclick="goPage(2)">Kembali ke Menu</button>
+          </div>
+          <div class="quiz-grid" id="quizWrap"></div>
+          <div class="hero-actions">
+            <button class="btn primary" onclick="showScore()">Lihat Skor</button>
+            <button class="btn secondary" onclick="resetQuiz()">Reset Quiz</button>
+            <span class="chip" id="scoreText">Skor: 0 / 5</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="bottombar">
+      <div class="dots" id="dots"></div>
+      <div class="footer-buttons">
+        <button class="btn secondary" onclick="prevPage()">BACK</button>
+        <button class="btn primary" onclick="nextPage()">NEXT</button>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    let currentPage = 1;
+    const totalPages = 6;
+    const pages = document.querySelectorAll('.page');
+    const pageLabel = document.getElementById('pageLabel');
+    const dots = document.getElementById('dots');
+
+    function renderDots(){
+      dots.innerHTML = '';
+      for(let i=1;i<=totalPages;i++){
+        const d = document.createElement('span');
+        d.className = 'dot' + (i===currentPage ? ' active' : '');
+        d.onclick = () => goPage(i);
+        dots.appendChild(d);
+      }
+    }
+
+    function pauseAllVideos(){
+      document.querySelectorAll('video').forEach(v => { try { v.pause(); } catch(e){} });
+      stopPlaying = false;
+      clearInterval(stopTimer);
+    }
+
+    function goPage(n){
+      if(n < 1 || n > totalPages) return;
+      pauseAllVideos();
+      currentPage = n;
+      pages.forEach(p => p.classList.toggle('active', Number(p.dataset.page) === n));
+      pageLabel.textContent = 'Page ' + n + ' / ' + totalPages;
+      renderDots();
+    }
+    function nextPage(){ goPage(Math.min(totalPages, currentPage + 1)); }
+    function prevPage(){ goPage(Math.max(1, currentPage - 1)); }
+    renderDots();
+
+    const stopMain = document.getElementById('stopMain');
+    const motionPopup = document.getElementById('motionPopup');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupText = document.getElementById('popupText');
+
+    let stopTimer = null;
+    let popupTimer = null;
+    let stopPlaying = false;
+    let lastPopupSecond = -1;
+    const frameStep = 0.16;
+    const frameDelay = 140;
+
+    const popupMateri = {
+      'kaki1.mp4': [
+        {time:0, title:'Awalan Gerakan Kaki', text:'Tumit ditarik mendekati pinggul, lutut ditekuk, dan telapak kaki mulai diputar keluar.'},
+        {time:5, title:'Posisi Telapak Kaki', text:'Telapak kaki menghadap keluar agar dorongan air menjadi lebih kuat dan terarah.'},
+        {time:10, title:'Persiapan Tendangan', text:'Kedua kaki harus seimbang supaya gerakan tidak miring dan tubuh tetap stabil.'},
+        {time:15, title:'Gerakan Terkontrol', text:'Jangan membuka lutut terlalu lebar. Fokus pada putaran telapak kaki dan posisi pinggul.'}
+      ],
+      'abim2.mp4': [
+        {time:0, title:'Dorongan Kaki', text:'Kaki menendang ke arah luar dan belakang secara bersamaan untuk mendorong tubuh maju.'},
+        {time:5, title:'Rapatkan Kaki', text:'Setelah menendang, kedua kaki dirapatkan kembali agar posisi tubuh menjadi streamline.'},
+        {time:10, title:'Arah Tendangan', text:'Tendangan tidak hanya ke samping, tetapi juga mendorong air ke belakang.'},
+        {time:15, title:'Meluncur', text:'Setelah kaki rapat, biarkan tubuh meluncur sejenak sebelum mengulang gerakan.'}
+      ],
+      'gerakan-tangan-abim.mp4': [
+        {time:0, title:'Posisi Awal Tangan', text:'Kedua tangan lurus ke depan dengan posisi tubuh sejajar dan rileks.'},
+        {time:5, title:'Tarikan Tangan', text:'Tangan membuka ke samping lalu menarik air ke arah dada untuk membantu tubuh naik.'},
+        {time:10, title:'Kembali ke Depan', text:'Setelah menarik, tangan segera dirapatkan dan diluruskan kembali ke depan.'},
+        {time:15, title:'Jaga Ritme', text:'Gerakan tangan tidak boleh terlalu lebar agar tenaga tidak cepat habis.'}
+      ],
+      'abim3.mp4': [
+        {time:0, title:'Awal Koordinasi', text:'Gerakan dimulai dari posisi tubuh lurus, tangan ke depan, dan kaki siap melakukan dorongan.'},
+        {time:5, title:'Ambil Napas', text:'Kepala naik saat tangan menarik air. Ambil napas cepat melalui mulut.'},
+        {time:10, title:'Tendang dan Luruskan', text:'Saat tangan kembali lurus, kaki menendang dan tubuh mulai meluncur.'},
+        {time:15, title:'Koordinasi Utuh', text:'Urutan yang benar: tarik tangan, ambil napas, tendang kaki, lalu meluncur.'}
+      ]
+    };
+
+    let activeStopSrc = 'kaki1.mp4';
+
+    function showMotionPopup(item){
+      if(!motionPopup || !item) return;
+      popupTitle.textContent = item.title;
+      popupText.textContent = item.text;
+      motionPopup.classList.add('show');
+      clearTimeout(popupTimer);
+      popupTimer = setTimeout(() => {
+        motionPopup.classList.remove('show');
+      }, 4200);
+    }
+
+    function checkFiveSecondPopup(){
+      const materi = popupMateri[activeStopSrc] || [];
+      const current = Math.floor(stopMain.currentTime);
+      const nearestFive = Math.floor(current / 5) * 5;
+
+      if(current >= 0 && nearestFive !== lastPopupSecond && current % 5 <= 1){
+        const item = materi.find(m => m.time === nearestFive);
+        if(item){
+          lastPopupSecond = nearestFive;
+          showMotionPopup(item);
+        }
+      }
+    }
+
+    function selectStop(src,title,desc){
+      stopPlaying = false;
+      clearInterval(stopTimer);
+      clearTimeout(popupTimer);
+      if(motionPopup) motionPopup.classList.remove('show');
+      activeStopSrc = src;
+      lastPopupSecond = -1;
+      stopMain.innerHTML = '<source src="' + src + '" type="video/mp4">';
+      stopMain.load();
+      document.getElementById('stopTitle').textContent = title;
+      document.getElementById('stopDesc').textContent = desc;
+      const firstPopup = (popupMateri[src] || [])[0];
+      setTimeout(() => showMotionPopup(firstPopup), 400);
+    }
+
+    function toggleStop(){
+    stopMain.addEventListener('timeupdate', checkFiveSecondPopup);
+  if(stopMain.paused){
+    stopMain.play();
+    showMotionPopup((popupMateri[activeStopSrc] || [])[0]);
+  } else {
+    stopMain.pause();
+  }
+}
+    function resetStop(){
+      stopPlaying = false;
+      clearInterval(stopTimer);
+      clearTimeout(popupTimer);
+      lastPopupSecond = -1;
+      stopMain.currentTime = 0;
+      if(motionPopup) motionPopup.classList.remove('show');
+    }
+
+    const essays = document.querySelectorAll('.essay');
+    const evalFill = document.getElementById('evalFill');
+    const evalPercent = document.getElementById('evalPercent');
+    function updateEval(){
+      let filled = 0;
+      essays.forEach(e => { if(e.value.trim()) filled++; });
+      const pct = Math.round((filled / essays.length) * 100);
+      evalFill.style.width = pct + '%';
+      evalPercent.textContent = pct + '% selesai';
+    }
+    essays.forEach(e => e.addEventListener('input', updateEval));
+    updateEval();
+
+    const quizData = [
+      {q:'Nama lain dari renang gaya dada adalah...', a:['Gaya bebas','Gaya katak','Gaya punggung','Gaya kupu-kupu'], c:1},
+      {q:'Saat gaya dada, gerakan kaki harus dilakukan secara...', a:['Bergantian','Simetris','Satu kaki saja','Acak'], c:1},
+      {q:'Napas diambil ketika...', a:['Kepala naik saat tangan menarik','Kepala masuk air','Kaki diam','Tubuh berhenti'], c:0},
+      {q:'Urutan koordinasi yang tepat adalah...', a:['Tarik tangan - ambil napas - tendang - meluncur','Tendang - berhenti - berdiri','Loncat - duduk - meluncur','Mengayuh bebas'], c:0},
+      {q:'Tujuan video stop motion adalah...', a:['Membuat video lebih cepat','Memperjelas detail tiap gerakan','Menghilangkan materi','Mengganti evaluasi'], c:1}
+    ];
+    const answers = {};
+    const quizWrap = document.getElementById('quizWrap');
+
+    function renderQuiz(){
+      quizWrap.innerHTML = '';
+      quizData.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+        card.innerHTML = '<h3>' + (idx+1) + '. ' + item.q + '</h3>';
+        item.a.forEach((text, optIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'option';
+          btn.textContent = text;
+          btn.onclick = () => chooseAnswer(idx,optIdx,btn);
+          card.appendChild(btn);
+        });
+        quizWrap.appendChild(card);
+      });
+    }
+    function chooseAnswer(qIdx,optIdx,btn){
+      answers[qIdx] = optIdx;
+      const options = btn.parentElement.querySelectorAll('.option');
+      options.forEach(o => o.classList.remove('correct','wrong'));
+      if(optIdx === quizData[qIdx].c) btn.classList.add('correct');
+      else btn.classList.add('wrong');
+      showScore(false);
+    }
+    function showScore(alertIt = true){
+      let score = 0;
+      quizData.forEach((q,i) => { if(answers[i] === q.c) score++; });
+      document.getElementById('scoreText').textContent = 'Skor: ' + score + ' / ' + quizData.length;
+      if(alertIt) alert('Skor kamu: ' + score + ' dari ' + quizData.length);
+    }
+    function resetQuiz(){
+      Object.keys(answers).forEach(k => delete answers[k]);
+      renderQuiz();
+      showScore(false);
+    }
+    renderQuiz();
+  </script>
+</body>
+</html>
